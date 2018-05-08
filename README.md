@@ -12,7 +12,7 @@ Chen:
 2.1 make necessary checks
 
 Fakhri:
-1.fix counter (board)
+1. fix counter (board)
 2. get parameters from console:
 2.1 create board
 2.2 fix the issue with the board recognition. 
