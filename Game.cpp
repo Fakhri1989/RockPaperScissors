@@ -4,12 +4,12 @@
 using namespace std;
 Game::Game(char ** argv, int argc)
 {
-	string lookAtMe=argvToString(argv, argc);
+	string lookAtMe=argvToString(argv, argc);//copying the argv to string for easier use
 	if (isConsole(lookAtMe))
 	{
 		PVP;
 	}
-	else 
+	else
 	{
 		FVF game(lookAtMe);
 		game.run(lookAtMe);

@@ -16,13 +16,13 @@ class Board {
 private:
 	Counter one, two;
 	Piece *** board;
-	Playa one(1), two(2);
+	Playa PlayerOne,PlayerTwo;
 	int height;
 	int width;
 	list <Piece *>pieces;
 public:
 	Board(int _height, int _width);
-	
+
 	Piece * getPiece(Point pos);
 
 	string PlacePiece(Piece * piece, bool seeMe);
@@ -40,7 +40,7 @@ public:
 	void printBoard(bool show1,bool show2,int delay);
 
 	enum GAME_STATUS {KEEP_PLAYING,  TIE , PLAYER_1_WIN, PLAYER_2_WIN };
-	
+
 	GAME_STATUS checkStatus(string & reason);
 
 };

@@ -1,17 +1,15 @@
 #include "Board.h"
 #include "Flag.h"
 #include "Gotoxy.h"
-Board::Board(int _height, int _width)
-{
+Board::Board(int _height, int _width) :PlayerOne(1), PlayerTwo(2) {
 	height = _height;
-	width=_width;
-	board = new Piece**[ height];
+	width = _width;
+	board = new Piece**[height];
 	board[0] = new Piece*[height*width];
 	memset(board[0], 0, height*width * sizeof(*board[0]));
 	for (int i = 1; i < height; i++)
 		board[i] = board[0] + i * width;
-
-}
+};
 
 Piece * Board::getPiece(Point pos)
 {
@@ -30,7 +28,7 @@ string Board::PlacePiece(Piece * piece, bool seeMe)
 
 	if (pos.i < 0 || pos.i >= height || pos.j < 0 || pos.j >= width)
 		return "Position " + pos.ToString() + " is out of range";
-	
+
 	if (board[pos.i][pos.j] != nullptr)
 	{
 		if (board[pos.i][pos.j]->GetPlayer() == piece->GetPlayer())
@@ -247,7 +245,7 @@ Board::GAME_STATUS Board::checkStatus(string & reason)
 			reason = "All flags of the opponent are captured";
 		return PLAYER_1_WIN;
 	}
-		
+
 	if (playerTwoAlive)
 	{
 		if (playerOneFlag)
