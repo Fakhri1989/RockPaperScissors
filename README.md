@@ -13,6 +13,9 @@ Chen:
 
 Fakhri:
 1.fix counter (board)
-2. get parameters from console
+2. get parameters from console:
 2.1 create board
 2.2 fix the issue with the board recognition. 
+
+
+**we might need to change the architecture of the code a little, logically it doesnt make sence for the board to hold the players (we can do that after we make the changes and everything works fine).
