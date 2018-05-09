@@ -3,7 +3,12 @@
 #include "consoleColors.h"
 
 using namespace std;
-Board board(10, 10);
+//Board board(10, 10);
+
+void GameManager::setBoard(int length, int width)
+{
+	gameBoard.setBoard(length, width);
+}
 
 bool GameManager::contains(string s, char ch)
 {
@@ -47,4 +52,18 @@ int GameManager::checkIfDistanceOk(int x0, int y0, int x1, int y1)
 	}
 
 	return 0;
+}
+
+void GameManager::Kill(Piece * First, Piece * Second)
+{
+		killOne(First);
+		killOne(Second);
+}
+
+void GameManager::killOne(Piece * moi)
+{
+	if (!(moi->IsAlive()))
+	{
+		getBoard()->RemovePiece(moi);
+	}
 }

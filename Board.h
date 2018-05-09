@@ -1,5 +1,10 @@
 #pragma once
+#include "Piece.h"
+#include "Flag.h"
+#include "Bomb.h"
+#include "Soldier.h"
 #include "Joker.h"
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -12,6 +17,8 @@
 #include "Player.h"
 using namespace std;
 
+class GameManager;
+
 class Board {
 private:
 	Counter one, two;
@@ -21,11 +28,13 @@ private:
 	int width;
 	list <Piece *>pieces;
 public:
-	Board(int _height, int _width);
+	Board():PlayerOne(1),PlayerTwo(2) {};
+
+	void setBoard(int _height, int _width);
 
 	Piece * getPiece(Point pos);
 
-	string PlacePiece(Piece * piece, bool seeMe);
+	string PlacePiece(Piece * piece, bool seeMe, GameManager *game);
 
 	void RemovePiece(Piece * piece);
 
@@ -43,5 +52,8 @@ public:
 
 	GAME_STATUS checkStatus(string & reason);
 
+	friend void Piece::Die();
+
+	void lowerCounter(Piece* target, int player);
 };
-extern Board board;
+//extern Board board;

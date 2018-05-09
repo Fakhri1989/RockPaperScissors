@@ -1,7 +1,9 @@
 #include "Board.h"
 #include "Flag.h"
 #include "Gotoxy.h"
-Board::Board(int _height, int _width) :PlayerOne(1), PlayerTwo(2) {
+
+void Board::setBoard(int _height, int _width)
+{
 	height = _height;
 	width = _width;
 	board = new Piece**[height];
@@ -9,7 +11,9 @@ Board::Board(int _height, int _width) :PlayerOne(1), PlayerTwo(2) {
 	memset(board[0], 0, height*width * sizeof(*board[0]));
 	for (int i = 1; i < height; i++)
 		board[i] = board[0] + i * width;
-};
+}
+;
+
 
 Piece * Board::getPiece(Point pos)
 {
@@ -19,7 +23,7 @@ Piece * Board::getPiece(Point pos)
 	return board[pos.i][pos.j];
 }
 
-string Board::PlacePiece(Piece * piece, bool seeMe)
+string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 {
 	pieces.push_back(piece);
 	piece->revealed = seeMe;
@@ -37,7 +41,11 @@ string Board::PlacePiece(Piece * piece, bool seeMe)
 		}
 		else
 		{
-			if (board[pos.i][pos.j]->Defend(piece) == Piece::DefendResult::Dead && piece->Defend(board[pos.i][pos.j]) == Piece::DefendResult::Alive)
+			if (board[pos.i][pos.j]->Defend(piece) == Piece::DefendResult::Dead)
+			{
+				RemovePiece(board[pos.i][pos.j]);
+			}
+			if (piece->IsAlive())
 			{
 				board[pos.i][pos.j] = piece;
 				if (piece->GetPlayer() == Piece::Player::Player1)
@@ -66,7 +74,10 @@ void Board::RemovePiece(Piece * piece)
 {
 	Point pos = piece->GetPosition();
 	if (board[pos.i][pos.j] == piece)
+	{
+		lowerCounter(piece, piece->GetPlayer());
 		board[pos.i][pos.j] = nullptr;
+	}
 }
 
 void Board::PrintWhileWePlay(Point first, Point second,int delay)
@@ -256,4 +267,12 @@ Board::GAME_STATUS Board::checkStatus(string & reason)
 	}
 	reason = "Both players don't have any movable pieces";
 	return TIE;
+}
+
+void Board::lowerCounter(Piece * target, int player)
+{
+	if (player == 1)
+		one.LowerCounter(target->ToChar());
+	else
+		two.LowerCounter(target->ToChar());
 }

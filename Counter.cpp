@@ -54,3 +54,29 @@ string Counter::checkCounter(Piece * piece)
 	}
 	return "ok";
 }
+
+void Counter::LowerCounter(char target)
+{
+
+	switch (target) {
+	case 'R':
+		rock--;
+		break;
+	case 'P':
+		paper--;
+		break;
+	case 'S':
+		scissors--;
+		break;
+	case 'J':
+		joker--;
+		break;
+	case 'F':
+		flag--;
+		break;
+	case 'B':
+		bomb--;
+		break;
+	}
+
+}

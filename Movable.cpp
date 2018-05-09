@@ -3,7 +3,7 @@
 
 void Movable::Move(Point newPos)
 {
-	board.MovePiece(this, newPos);
+	(getBoardFromPiece())->MovePiece(this, newPos);
 	position = newPos;
 }
 

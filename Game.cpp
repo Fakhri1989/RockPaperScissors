@@ -7,7 +7,7 @@ Game::Game(char ** argv, int argc)
 	string lookAtMe=argvToString(argv, argc);//copying the argv to string for easier use
 	if (isConsole(lookAtMe))
 	{
-		PVP;
+		//PVP game;
 	}
 	else
 	{

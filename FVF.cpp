@@ -1,5 +1,9 @@
 #include "FVF.h"
 
+FVF::FVF(string _parameters) :parameters(_parameters)
+{
+	setBoard(10, 10);
+}
 int FVF::run(string gameOn)
 {
 	int winner;
@@ -24,7 +28,7 @@ int FVF::run(string gameOn)
 
 	out = parsePlacementFile("player2.rps_board", Piece::Player::Player2);
 	if (!quiet)
-		board.printBoard(show1, show2, delayTime);
+		getBoard()->printBoard(show1, show2, delayTime);
 	if (out.fileName != REG)
 	{
 		playerTwoLineFailure = out.lineNumber;
@@ -41,7 +45,7 @@ int FVF::run(string gameOn)
 		out.open("rps.output");
 		out << "Winner: " + to_string(winner) + "\n";
 		out << "Reason: " + reason + "\n\n";
-		out << board.ToString() + "\n";
+		out << getBoard()->ToString() + "\n";
 		out.close();
 	}
 	else if (playerOneLineFailure > 0)
@@ -50,7 +54,7 @@ int FVF::run(string gameOn)
 		out.open("rps.output");
 		out << "Winner: " + to_string(winner) + "\n";
 		out << "Reason: " + reason + "\n\n";
-		out << board.ToString() + "\n";
+		out << getBoard()->ToString() + "\n";
 		out.close();
 	}
 	else if (playerTwoLineFailure > 0)
@@ -59,7 +63,7 @@ int FVF::run(string gameOn)
 		out.open("rps.output");
 		out << "Winner: " + to_string(winner) + "\n";
 		out << "Reason: " + reason + "\n\n";
-		out << board.ToString() + "\n";
+		out << getBoard()->ToString() + "\n";
 		out.close();
 	}
 	else
@@ -80,7 +84,7 @@ int FVF::run(string gameOn)
 		out.open("rps.output");
 		out << "Winner: " + to_string(winner) + "\n";
 		out << "Reason: " + reason + "\n\n";
-		out << board.ToString() + "\n";
+		out << getBoard()->ToString() + "\n";
 		out.close();
 	}
 	return 0;
@@ -137,7 +141,7 @@ int FVF::getInfoFromLine(string str, int & x, int & y, int & nx, int & ny, int &
 bool FVF::updateParameters(string update)
 {
 	string target, delayThingy;
-	char c;
+	//char c;
 	int i = 0;
 	bool isItOk;
 	for (i; i < update.length(); i++)
@@ -193,7 +197,7 @@ bool FVF::updateParameters(string update)
 
 bool FVF::changeTheOthers(string parameter)
 {
-	
+
 		string showAll = "-show-all";
 		showAll.append(1, '\0');
 		if (parameter == "-show 1")
@@ -244,7 +248,7 @@ bool FVF::changeTheOthers(string parameter)
 			}
 		}
 		return false;//we have made it so if you try to update the same field twice it will be an error
-	
+
 }
 
 bool FVF::changeDelay(int time)
@@ -327,28 +331,29 @@ string FVF::parseMove(string input, Piece::Player player)
 	{
 		Point pos1(x0, y0);
 
-		if ((piece = board.getPiece(pos1)) != nullptr)
+		if ((piece = getBoard()->getPiece(pos1)) != nullptr)
 		{
 			if (piece->GetPlayer() == player)
 			{
 				if ((movable = dynamic_cast<Movable *>(piece)) != nullptr)
 				{
 					Point enemyPos(x1, y1);
-					enemy = board.getPiece(enemyPos);
+					enemy = getBoard()->getPiece(enemyPos);
 
 					if (enemy == nullptr)
 					{
-						board.MovePiece(piece, enemyPos);
+						getBoard()->MovePiece(piece, enemyPos);
 						if (!quiet)
-							board.PrintWhileWePlay(pos1, enemyPos, delayTime);
+							getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime);
 					}
 					else
 					{
 						if (piece->GetPlayer() != enemy->GetPlayer())
 						{
 							movable->Attack(enemy);
+							Kill(movable, enemy);
 							if (!quiet)
-								board.PrintWhileWePlay(pos1, enemyPos, delayTime);
+								getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime);
 						}
 						else
 							return "you can NOT attack your own pieces";
@@ -368,7 +373,7 @@ string FVF::parseMove(string input, Piece::Player player)
 		{
 			Joker * joker;
 			Point pos(jx, jy);
-			Piece * piece = board.getPiece(pos);
+			Piece * piece = getBoard()->getPiece(pos);
 			if (piece != nullptr)
 			{
 				if (piece->GetPlayer() == player)
@@ -398,7 +403,7 @@ string FVF::parseMove(string input, Piece::Player player)
 							break;
 						}
 						if (!quiet)
-							board.PrintWhileWePlay(pos, pos, delayTime);
+							getBoard()->PrintWhileWePlay(pos, pos, delayTime);
 					}
 					else
 						return "The position " + pos.ToString() + " does not occupy a Joker";
@@ -469,7 +474,7 @@ LineError FVF::parseMoveFile(string player1File, string player2File, int & winne
 		}
 
 
-		Board::GAME_STATUS status = board.checkStatus(reason);
+		Board::GAME_STATUS status = getBoard()->checkStatus(reason);
 
 		if (status != Board::KEEP_PLAYING)
 			endGame = true;
@@ -513,28 +518,28 @@ string FVF::parsePlacement(string input, Piece::Player player)
 		switch (c0)
 		{
 		case 'B':
-			bomb = new Bomb(Point(x0, y0), player);
-			board.PlacePiece(bomb, isItKnown(player));
+			bomb = new Bomb(Point(x0, y0), player,getBoard());
+			getBoard()->PlacePiece(bomb, isItKnown(player),this);
 			return "ok";
 			break;
 		case 'F':
-			flag = new Flag(Point(x0, y0), player);
-			board.PlacePiece(flag, isItKnown(player));
+			flag = new Flag(Point(x0, y0), player,getBoard());
+			getBoard()->PlacePiece(flag, isItKnown(player),this);
 			return "ok";
 			break;
 		case 'R':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::R);
-			board.PlacePiece(sol, isItKnown(player));
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::R,getBoard());
+			getBoard()->PlacePiece(sol, isItKnown(player),this);
 			return "ok";
 			break;
 		case 'S':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::S);
-			board.PlacePiece(sol, isItKnown(player));
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::S, getBoard());
+			getBoard()->PlacePiece(sol, isItKnown(player),this);
 			return "ok";
 			break;
 		case 'P':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::P);
-			board.PlacePiece(sol, isItKnown(player));
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::P, getBoard());
+			getBoard()->PlacePiece(sol, isItKnown(player),this);
 			return "ok";
 			break;
 		case 'J':
@@ -544,23 +549,23 @@ string FVF::parsePlacement(string input, Piece::Player player)
 				switch (c1)
 				{
 				case 'R':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::R);
-					board.PlacePiece(joker, 1);
+					joker = new Joker(Point(x0, y0), player, Joker::ID::R, getBoard());
+					getBoard()->PlacePiece(joker, 1,this);
 					return "ok";
 					break;
 				case 'P':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::P);
-					board.PlacePiece(joker, isItKnown(player));
+					joker = new Joker(Point(x0, y0), player, Joker::ID::P, getBoard());
+					getBoard()->PlacePiece(joker, isItKnown(player),this);
 					return "ok";
 					break;
 				case 'S':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::S);
-					board.PlacePiece(joker, isItKnown(player));
+					joker = new Joker(Point(x0, y0), player, Joker::ID::S, getBoard());
+					getBoard()->PlacePiece(joker, isItKnown(player),this);
 					return "ok";
 					break;
 				case 'B':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::B);
-					board.PlacePiece(joker, isItKnown(player));
+					joker = new Joker(Point(x0, y0), player, Joker::ID::B, getBoard());
+					getBoard()->PlacePiece(joker, isItKnown(player),this);
 					return "ok";
 					break;
 				default:

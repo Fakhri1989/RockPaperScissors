@@ -1,5 +1,5 @@
 #include "Piece.h"
-#include "Board.h"
+
 
 bool Piece::IsAlive()
 {
@@ -19,5 +19,10 @@ Piece::Player Piece::GetPlayer()
 void Piece::Die()
 {
 	alive = false;
-	board.RemovePiece(this);
+	//gameBoard->RemovePiece(this);
+}
+
+Board * Piece::getBoardFromPiece()
+{
+	return gameBoard;
 }

@@ -12,7 +12,8 @@ public:
 	int flag;
 
 	Counter(int _rock = 0, int _paper = 0, int _scissors = 0, int _joker = 0, int _bomb = 0, int _flag = 0)
-		:rock(_rock), paper(_paper), scissors(_scissors), joker(_joker), bomb(_bomb), flag(_flag){}
+		:rock(_rock), paper(_paper), scissors(_scissors), joker(_joker), bomb(_bomb), flag(_flag) {}
 
 	string checkCounter(Piece * piece);
-};
+	void LowerCounter(char target);
+}

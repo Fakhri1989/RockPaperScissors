@@ -17,7 +17,9 @@ void Joker::Attack(Piece * enemy)
 		if (movable->IsAlive())
 			Move(enemy->GetPosition());
 		else
+		{
 			this->Die();
+		}
 	}
 	else
 	{
@@ -32,10 +34,10 @@ void Joker::SetID(ID newType)
 	switch (newType)
 	{
 	case Joker::B:
-		myId = new Bomb(position, player);
+		myId = new Bomb(position, player,gameBoard);
 		break;
 	default:
-		myId = new Soldier(position, player, (Soldier::Type)newType);
+		myId = new Soldier(position, player, (Soldier::Type)newType,gameBoard);
 		break;
 	}
 }
