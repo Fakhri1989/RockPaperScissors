@@ -3,7 +3,7 @@
 class GameManager;
 class Movable : public Piece
 {
-
+	
 public:
 	void Move(Point newPos);
 	virtual DefendResult Defend(Piece * enemy) override = 0;
