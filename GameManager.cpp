@@ -61,7 +61,7 @@ void GameManager::Kill(Piece * First, Piece * Second)
 }
 
 void GameManager::killOne(Piece * moi)
-{
+{	
 	if (!(moi->IsAlive()))
 	{
 		getBoard()->RemovePiece(moi);

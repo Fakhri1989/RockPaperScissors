@@ -9,7 +9,7 @@ Game::Game(char ** argv, int argc)
 	{
 		//PVP game;
 	}
-	else
+	else 
 	{
 		FVF game(lookAtMe);
 		game.run(lookAtMe);

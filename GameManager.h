@@ -12,12 +12,12 @@ using namespace std;
 class GameManager {
 	Board gameBoard;
 protected:
-
+	
 	bool show1 = false;
 	bool show2 = false;
 public:
 	virtual int run(string) = 0;
-
+	
 	GameManager() {};
 
 	void setBoard(int length, int width);

@@ -1,7 +1,7 @@
 #include "FVF.h"
 
 FVF::FVF(string _parameters) :parameters(_parameters)
-{
+{ 
 	setBoard(10, 10);
 }
 int FVF::run(string gameOn)
@@ -197,7 +197,7 @@ bool FVF::updateParameters(string update)
 
 bool FVF::changeTheOthers(string parameter)
 {
-
+	
 		string showAll = "-show-all";
 		showAll.append(1, '\0');
 		if (parameter == "-show 1")
@@ -248,7 +248,7 @@ bool FVF::changeTheOthers(string parameter)
 			}
 		}
 		return false;//we have made it so if you try to update the same field twice it will be an error
-
+	
 }
 
 bool FVF::changeDelay(int time)
