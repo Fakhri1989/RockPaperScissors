@@ -90,7 +90,7 @@ void PVP::run(){
 
 	while((status = gameBoard.checkStatus(reason)) == Board::GAME_STATUS::KEEP_PLAYING)
 	{
-		
+
 		do {
 			badInput = false;
 			cout << "\nPlayer " << (isPlayerOneCurrentlyPlaying ? "one" : "two") << ": Choose a point from where you want to move your piece: ";
@@ -104,7 +104,7 @@ void PVP::run(){
 				badInput = true;
 			}
 		} while (badInput);
-		
+
 		do {
 			badInput = false;
 			list <Joker *> jokers = gameBoard.getJokers(isPlayerOneCurrentlyPlaying ? Piece::Player::Player1 : Piece::Player::Player2);
@@ -135,7 +135,7 @@ void PVP::run(){
 
 			}
 
-			
+
 			if (error != "ok")
 			{
 				cout << "\nThe following has occured: \n  " << error << endl;
@@ -145,7 +145,7 @@ void PVP::run(){
 
 		isPlayerOneCurrentlyPlaying = !isPlayerOneCurrentlyPlaying;
 	}
-	
+
 	switch (status)
 	{
 	case Board::TIE:
@@ -262,6 +262,6 @@ string PVP::parseJoker(int jx, int jy, char c, Piece::Player player)
 	}
 	else
 		return "The position " + pos.ToString() + " is empty";
-	
+
 	return "ok";
 }

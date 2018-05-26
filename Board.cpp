@@ -38,7 +38,7 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 
 	if (pos.i < 0 || pos.i >= height || pos.j < 0 || pos.j >= width)
 		return "Position " + pos.ToString() + " is out of range";
-
+	
 	if (board[pos.i][pos.j] != nullptr)
 	{
 		if (board[pos.i][pos.j]->GetPlayer() == piece->GetPlayer())
@@ -265,7 +265,7 @@ Board::GAME_STATUS Board::checkStatus(string & reason)
 			reason = "All flags of the opponent are captured";
 		return PLAYER_1_WIN;
 	}
-
+		
 	if (playerTwoAlive)
 	{
 		if (playerOneFlag)
