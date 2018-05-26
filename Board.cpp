@@ -36,8 +36,17 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 	Point pos = piece->GetPosition();
 	string res = "ok";
 
+	if (piece->GetPlayer() == Piece::Player::Player1)
+		res = one.checkCounter(piece);
+	else
+		res = two.checkCounter(piece);
+	if (res != "ok")
+		return res;
+
 	if (pos.i < 0 || pos.i >= height || pos.j < 0 || pos.j >= width)
 		return "Position " + pos.ToString() + " is out of range";
+
+
 	
 	if (board[pos.i][pos.j] != nullptr)
 	{
@@ -48,34 +57,17 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 		else
 		{
 			if (board[pos.i][pos.j]->Defend(piece) == Piece::DefendResult::Dead)
+
 			{
 				RemovePiece(board[pos.i][pos.j]);
-			}
-			if (piece->IsAlive())
-			{
-				
-				if (piece->GetPlayer() == Piece::Player::Player1)
-				{
-					res = one.checkCounter(piece);
-				}
-				else
-				{
-					res = two.checkCounter(piece);
-				}
-				if (res == "ok")
+				if (piece->Defend(board[pos.i][pos.j]) == Piece::DefendResult::Alive)
 					board[pos.i][pos.j] = piece;
 			}
 		}
 	}
 	else
 	{
-		
-		if (piece->GetPlayer() == Piece::Player::Player1)
-			res = one.checkCounter(piece);
-		else
-			res = two.checkCounter(piece);
-		if (res == "ok")
-					board[pos.i][pos.j] = piece;
+		board[pos.i][pos.j] = piece;
 	}
 	return res;
 }
