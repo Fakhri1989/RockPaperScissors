@@ -10,13 +10,13 @@
 using namespace std;
 
 class GameManager {
-	Board gameBoard;
+	
 protected:
-
+	Board gameBoard;
 	bool show1 = false;
 	bool show2 = false;
+	string parsePlacement(string input, Piece::Player player);
 public:
-	virtual int run(string) = 0;
 
 	GameManager() {};
 

@@ -2,6 +2,12 @@
 #include "Flag.h"
 #include "Gotoxy.h"
 
+void Board::setCounters(Counter PlayerOneCounter, Counter playerTwoCounter)
+{
+	one = PlayerOneCounter;
+	two = playerTwoCounter;
+}
+
 void Board::setBoard(int _height, int _width)
 {
 	height = _height;
@@ -47,7 +53,7 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 			}
 			if (piece->IsAlive())
 			{
-				board[pos.i][pos.j] = piece;
+				
 				if (piece->GetPlayer() == Piece::Player::Player1)
 				{
 					res = one.checkCounter(piece);
@@ -56,16 +62,20 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 				{
 					res = two.checkCounter(piece);
 				}
+				if (res == "ok")
+					board[pos.i][pos.j] = piece;
 			}
 		}
 	}
 	else
 	{
-		board[pos.i][pos.j] = piece;
+		
 		if (piece->GetPlayer() == Piece::Player::Player1)
 			res = one.checkCounter(piece);
 		else
 			res = two.checkCounter(piece);
+		if (res == "ok")
+					board[pos.i][pos.j] = piece;
 	}
 	return res;
 }
@@ -75,7 +85,6 @@ void Board::RemovePiece(Piece * piece)
 	Point pos = piece->GetPosition();
 	if (board[pos.i][pos.j] == piece)
 	{
-		lowerCounter(piece, piece->GetPlayer());
 		board[pos.i][pos.j] = nullptr;
 	}
 }
@@ -269,10 +278,17 @@ Board::GAME_STATUS Board::checkStatus(string & reason)
 	return TIE;
 }
 
-void Board::lowerCounter(Piece * target, int player)
+list<Joker*> Board::getJokers(Piece::Player player)
 {
-	if (player == 1)
-		one.LowerCounter(target->ToChar());
-	else
-		two.LowerCounter(target->ToChar());
+	list<Joker*> jokers;
+	Joker * joker;
+	for (Piece * piece : pieces)
+	{
+		joker = dynamic_cast<Joker *>(piece);
+		if (piece->IsAlive() && joker != nullptr && piece->GetPlayer() == player)
+		{
+			jokers.push_back(joker);
+		}
+	}
+	return jokers;
 }

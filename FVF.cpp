@@ -2,6 +2,8 @@
 
 FVF::FVF(string _parameters) :parameters(_parameters)
 {
+	// change parameters through the 'gameOn'
+
 	setBoard(10, 10);
 }
 int FVF::run(string gameOn)
@@ -311,6 +313,91 @@ LineError FVF::parsePlacementFile(string path, Piece::Player player)
 	return out;
 }
 
+LineError FVF::parseMoveFile(string player1File, string player2File, int & winner, string & reason)
+{
+	bool endGame = false;
+	bool player1Turn = true;
+	string line;
+	fstream f1, f2;
+	int counter1, counter2;
+	LineError ok;
+	f1.open(player1File);
+	f2.open(player2File);
+	counter1 = counter2 = 0;
+	if (!f1.is_open())
+		return LineError(player1File, 0, Piece::Player::Player1, "File was not found");
+	if (!f2.is_open())
+		return LineError(player2File, 0, Piece::Player::Player2, "File was not found");
+	while ((!f1.eof() || !f2.eof()) && !endGame)
+	{
+		if (player1Turn)
+		{
+			if (f1.eof())
+			{
+				getline(f2, line);
+				player1Turn = false;
+			}
+			else
+			{
+				getline(f1, line);
+			}
+		}
+		else
+		{
+			if (f2.eof())
+			{
+				getline(f1, line);
+				player1Turn = true;
+			}
+			else
+			{
+				getline(f2, line);
+			}
+		}
+		int now = (player1Turn ? ++counter1 : ++counter2);
+		string path = (player1Turn ? player1File : player2File);
+
+		string exeption = parseMove(line, player1Turn ? Piece::Player::Player1 : Piece::Player::Player2);
+
+
+		if (exeption != "ok") {
+			if (player1Turn)
+				return LineError(player1File, now, Piece::Player::Player1, exeption);
+			else
+				return LineError(player2File, now, Piece::Player::Player2, exeption);
+		}
+
+
+		Board::GAME_STATUS status = getBoard()->checkStatus(reason);
+
+		if (status != Board::KEEP_PLAYING)
+			endGame = true;
+
+		switch (status)
+		{
+		case Board::TIE:
+			winner = 0;
+			break;
+		case Board::PLAYER_1_WIN:
+			winner = 1;
+			break;
+		case Board::PLAYER_2_WIN:
+			winner = 2;
+			break;
+		}
+		player1Turn = !player1Turn;
+	}
+
+	f1.close();
+	f2.close();
+	if (!endGame)
+	{
+		winner = 0;
+		reason = "A tie - both Moves input files done without a winner";
+	}
+	return ok;
+}
+
 string FVF::parseMove(string input, Piece::Player player)
 {
 	Movable * movable;
@@ -419,168 +506,3 @@ string FVF::parseMove(string input, Piece::Player player)
 	return "ok";
 }
 
-LineError FVF::parseMoveFile(string player1File, string player2File, int & winner, string & reason)
-{
-	bool endGame = false;
-	bool player1Turn = true;
-	string line;
-	fstream f1, f2;
-	int counter1, counter2;
-	LineError ok;
-	f1.open(player1File);
-	f2.open(player2File);
-	counter1 = counter2 = 0;
-	if (!f1.is_open())
-		return LineError(player1File, 0, Piece::Player::Player1, "File was not found");
-	if (!f2.is_open())
-		return LineError(player2File, 0, Piece::Player::Player2, "File was not found");
-	while ((!f1.eof() || !f2.eof()) && !endGame)
-	{
-		if (player1Turn)
-		{
-			if (f1.eof())
-			{
-				getline(f2, line);
-				player1Turn = false;
-			}
-			else
-			{
-				getline(f1, line);
-			}
-		}
-		else
-		{
-			if (f2.eof())
-			{
-				getline(f1, line);
-				player1Turn = true;
-			}
-			else
-			{
-				getline(f2, line);
-			}
-		}
-		int now = (player1Turn ? ++counter1 : ++counter2);
-		string path = (player1Turn ? player1File : player2File);
-
-		string exeption = parseMove(line, player1Turn ? Piece::Player::Player1 : Piece::Player::Player2);
-
-
-		if (exeption != "ok") {
-			if (player1Turn)
-				return LineError(player1File, now, Piece::Player::Player1, exeption);
-			else
-				return LineError(player2File, now, Piece::Player::Player2, exeption);
-		}
-
-
-		Board::GAME_STATUS status = getBoard()->checkStatus(reason);
-
-		if (status != Board::KEEP_PLAYING)
-			endGame = true;
-
-		switch (status)
-		{
-		case Board::TIE:
-			winner = 0;
-			break;
-		case Board::PLAYER_1_WIN:
-			winner = 1;
-			break;
-		case Board::PLAYER_2_WIN:
-			winner = 2;
-			break;
-		}
-		player1Turn = !player1Turn;
-	}
-
-	f1.close();
-	f2.close();
-	if (!endGame)
-	{
-		winner = 0;
-		reason = "A tie - both Moves input files done without a winner";
-	}
-	return ok;
-}
-
-string FVF::parsePlacement(string input, Piece::Player player)
-{
-	Bomb * bomb;
-	Flag * flag;
-	Soldier * sol;
-	int y0, x0;
-	char c0, c1;
-
-
-	if (sscanf(input.c_str(), "%c %d %d", &c0, &x0, &y0) == 3)
-	{
-		switch (c0)
-		{
-		case 'B':
-			bomb = new Bomb(Point(x0, y0), player,getBoard());
-			getBoard()->PlacePiece(bomb, isItKnown(player),this);
-			return "ok";
-			break;
-		case 'F':
-			flag = new Flag(Point(x0, y0), player,getBoard());
-			getBoard()->PlacePiece(flag, isItKnown(player),this);
-			return "ok";
-			break;
-		case 'R':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::R,getBoard());
-			getBoard()->PlacePiece(sol, isItKnown(player),this);
-			return "ok";
-			break;
-		case 'S':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::S, getBoard());
-			getBoard()->PlacePiece(sol, isItKnown(player),this);
-			return "ok";
-			break;
-		case 'P':
-			sol = new Soldier(Point(x0, y0), player, Soldier::Type::P, getBoard());
-			getBoard()->PlacePiece(sol, isItKnown(player),this);
-			return "ok";
-			break;
-		case 'J':
-			Joker * joker;
-			if (sscanf(input.c_str(), "%c %d %d %c", &c0, &x0, &y0, &c1) == 4)
-			{
-				switch (c1)
-				{
-				case 'R':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::R, getBoard());
-					getBoard()->PlacePiece(joker, 1,this);
-					return "ok";
-					break;
-				case 'P':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::P, getBoard());
-					getBoard()->PlacePiece(joker, isItKnown(player),this);
-					return "ok";
-					break;
-				case 'S':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::S, getBoard());
-					getBoard()->PlacePiece(joker, isItKnown(player),this);
-					return "ok";
-					break;
-				case 'B':
-					joker = new Joker(Point(x0, y0), player, Joker::ID::B, getBoard());
-					getBoard()->PlacePiece(joker, isItKnown(player),this);
-					return "ok";
-					break;
-				default:
-					return "Bad input- wrong type for Joker";
-					break;
-				}
-			}
-			else
-				return "No Joker type was given";
-			break;
-		default:
-			return "Bad format- no piece type by this name";
-			break;
-		}
-	}
-	else
-		return "input does not meet criteria. only <PIECE_CHAR> <X> <Y> or J <X> <Y> <PIECE_CHAR> is allowed.";
-}

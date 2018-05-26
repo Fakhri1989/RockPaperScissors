@@ -7,7 +7,8 @@ Game::Game(char ** argv, int argc)
 	string lookAtMe=argvToString(argv, argc);//copying the argv to string for easier use
 	if (isConsole(lookAtMe))
 	{
-		//PVP game;
+		PVP game;
+		game.run();
 	}
 	else
 	{
@@ -34,17 +35,5 @@ string Game::argvToString(char ** argv, int argc)
 
 bool Game::isConsole(string target)
 {
-	string compare = "console";
-	bool isConsole = false;
-	for (int i = 0; i < target.length(), target[i] != '\0'; i++)
-	{
-		if (target[i] == 'c')
-		{
-			isConsole = true;
-			while (target[i] != ' ')
-				if (target[i] != compare[i])
-					isConsole = false;
-		}
-	}
-	return isConsole;
+	return target.find("-console") != std::string::npos;
 }

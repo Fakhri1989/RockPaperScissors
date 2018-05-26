@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{2A735D1D-7147-4DE4-AF0D-708E21F85F93}</ProjectGuid>
     <RootNamespace>RockPaperScissors</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,8 +41,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -129,6 +129,7 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="PVP.cpp" />
     <ClCompile Include="Soldier.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +144,6 @@
     <ClInclude Include="Gotoxy.h" />
     <ClInclude Include="Joker.h" />
     <ClInclude Include="LineError.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="Movable.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />

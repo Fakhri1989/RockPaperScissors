@@ -3,11 +3,82 @@
 #include "consoleColors.h"
 
 using namespace std;
-//Board board(10, 10);
 
 void GameManager::setBoard(int length, int width)
 {
 	gameBoard.setBoard(length, width);
+}
+
+string GameManager::parsePlacement(string input, Piece::Player player)
+{
+	Bomb * bomb;
+	Flag * flag;
+	Soldier * sol;
+	int y0, x0;
+	char c0, c1;
+
+
+	if (sscanf(input.c_str(), "%c %d %d", &c0, &x0, &y0) == 3)
+	{
+		switch (c0)
+		{
+		case 'B':
+			bomb = new Bomb(Point(x0, y0), player, getBoard());
+			return getBoard()->PlacePiece(bomb, isItKnown(player), this);
+			break;
+		case 'F':
+			flag = new Flag(Point(x0, y0), player, getBoard());
+			return getBoard()->PlacePiece(flag, isItKnown(player), this);
+			break;
+		case 'R':
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::R, getBoard());
+			return getBoard()->PlacePiece(sol, isItKnown(player), this);
+			break;
+		case 'S':
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::S, getBoard());
+			return getBoard()->PlacePiece(sol, isItKnown(player), this);
+			break;
+		case 'P':
+			sol = new Soldier(Point(x0, y0), player, Soldier::Type::P, getBoard());
+			return getBoard()->PlacePiece(sol, isItKnown(player), this);
+			break;
+		case 'J':
+			Joker * joker;
+			if (sscanf(input.c_str(), "%c %d %d %c", &c0, &x0, &y0, &c1) == 4)
+			{
+				switch (c1)
+				{
+				case 'R':
+					joker = new Joker(Point(x0, y0), player, Joker::ID::R, getBoard());
+					return getBoard()->PlacePiece(joker, 1, this);
+					break;
+				case 'P':
+					joker = new Joker(Point(x0, y0), player, Joker::ID::P, getBoard());
+					return getBoard()->PlacePiece(joker, isItKnown(player), this);
+					break;
+				case 'S':
+					joker = new Joker(Point(x0, y0), player, Joker::ID::S, getBoard());
+					return getBoard()->PlacePiece(joker, isItKnown(player), this);
+					break;
+				case 'B':
+					joker = new Joker(Point(x0, y0), player, Joker::ID::B, getBoard());
+					return getBoard()->PlacePiece(joker, isItKnown(player), this);
+					break;
+				default:
+					return "Bad input- wrong type for Joker";
+					break;
+				}
+			}
+			else
+				return "No Joker type was given";
+			break;
+		default:
+			return "Bad format- no piece type by this name";
+			break;
+		}
+	}
+	else
+		return "input does not meet criteria. only <PIECE_CHAR> <X> <Y> or J <X> <Y> <PIECE_CHAR> is allowed.";
 }
 
 bool GameManager::contains(string s, char ch)
@@ -19,7 +90,7 @@ int GameManager::stoi(string in)
 {
 	int j = 0;
 	int res = 0;
-	for(int i=in.length()-1;i>=0;i--)
+	for(int i=in.length()-1 ;i>=0;i--)
 	{
 		res += (in[i] - '0')*pow(10, j);
 		j++;

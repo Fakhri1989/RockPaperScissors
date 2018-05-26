@@ -13,14 +13,14 @@ class FVF : public GameManager
 
 public:
 	FVF(string _parameters);
-	int run(string) override;
+	int run(string);
 	int getInfoFromLine(string str, int& x, int& y, int& nx, int&  ny, int& jx, int& jy, char & jt);
 	bool updateParameters(string update);
 	bool changeTheOthers(string parameter);
 	bool changeDelay(int time);
 	bool catchFirstNum(string str, int& x, int& index);
 	LineError parsePlacementFile(string path, Piece::Player player);
-	string parseMove(string input, Piece::Player player);
 	LineError parseMoveFile(string player1File, string player2File, int & winner, string & reason);
-	string parsePlacement(string input, Piece::Player player);
+	string parseMove(string input, Piece::Player player);
+
 };

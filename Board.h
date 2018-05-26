@@ -30,6 +30,8 @@ private:
 public:
 	Board():PlayerOne(1),PlayerTwo(2) {};
 
+	void setCounters(Counter PlayerOneCounter, Counter playerTwoCounter);
+
 	void setBoard(int _height, int _width);
 
 	Piece * getPiece(Point pos);
@@ -48,12 +50,14 @@ public:
 
 	void printBoard(bool show1,bool show2,int delay);
 
+	Counter & GetPlayerOneCounter() { return one; }
+	Counter & GetPlayerTwoCounter() { return two; }
+
 	enum GAME_STATUS {KEEP_PLAYING,  TIE , PLAYER_1_WIN, PLAYER_2_WIN };
 
 	GAME_STATUS checkStatus(string & reason);
 
 	friend void Piece::Die();
-
-	void lowerCounter(Piece* target, int player);
+	
+	list <Joker *> getJokers(Piece::Player player);
 };
-//extern Board board;
