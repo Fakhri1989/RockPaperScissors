@@ -189,7 +189,7 @@ void Board::printBoard(bool show1,bool show2,int delay)
 			{
 				if (board[i][j]->GetPlayer() == Piece::Player::Player1)
 				{
-						if (board[i][j]->revealed == false)
+						if (board[i][j]->revealed == false&&show1)
 							cout << red << "U";
 						else
 							if (board[i][j]->ToChar() == 'J')
@@ -201,7 +201,7 @@ void Board::printBoard(bool show1,bool show2,int delay)
 					}
 				else
 				{
-						if (board[i][j]->revealed == false)
+						if (board[i][j]->revealed == false&&show2)
 							cout << yellow << "U";
 						else
 							if (board[i][j]->ToChar() == 'J')
