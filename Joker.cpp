@@ -15,7 +15,9 @@ void Joker::Attack(Piece * enemy)
 	{
 		movable->Attack(enemy);
 		if (movable->IsAlive())
+		{
 			Move(enemy->GetPosition());
+		}
 		else
 		{
 			this->Die();
@@ -42,12 +44,19 @@ void Joker::SetID(ID newType)
 	}
 }
 
-char Joker::ToChar()
+char Joker::pieceInfo()
+{
+	return tolower(myId->pieceInfo());
+}
+
+char Joker::ToChar(bool show)
 {
 	if (revealed)
 		return 'J';
+	else if (show)
+		return 'U';
 	else
-		return tolower(myId->ToChar());
+		return tolower(myId->ToChar(show));
 }
 
 string Joker::ToString()

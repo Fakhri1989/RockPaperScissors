@@ -28,7 +28,7 @@ int FVF::run(string gameOn)
 
 	out = parsePlacementFile("player2.rps_board", Piece::Player::Player2);
 	if (!quiet)
-		getBoard()->printBoard(show1, show2, delayTime);
+		getBoard()->printBoard(show1, show2, delayTime, onlyKnownInfo);
 	if (out.fileName != REG)
 	{
 		playerTwoLineFailure = out.lineNumber;
@@ -429,7 +429,7 @@ string FVF::parseMove(string input, Piece::Player player)
 					{
 						getBoard()->MovePiece(piece, enemyPos);
 						if (!quiet)
-							getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime);
+							getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime, onlyKnownInfo);
 					}
 					else
 					{
@@ -438,7 +438,7 @@ string FVF::parseMove(string input, Piece::Player player)
 							movable->Attack(enemy);
 							Kill(movable, enemy);
 							if (!quiet)
-								getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime);
+								getBoard()->PrintWhileWePlay(pos1, enemyPos, delayTime, onlyKnownInfo);
 						}
 						else
 							return "you can NOT attack your own pieces";
@@ -488,7 +488,7 @@ string FVF::parseMove(string input, Piece::Player player)
 							break;
 						}
 						if (!quiet)
-							getBoard()->PrintWhileWePlay(pos, pos, delayTime);
+							getBoard()->PrintWhileWePlay(pos, pos, delayTime, onlyKnownInfo);
 					}
 					else
 						return "The position " + pos.ToString() + " does not occupy a Joker";

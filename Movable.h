@@ -10,6 +10,6 @@ public:
 	Movable(Point _pos, Player _player, Board* gameBoard) :Piece(_pos, _player, gameBoard) {};
 	virtual string ToString() = 0;
 	virtual void Attack(Piece * enemy);
-	virtual char ToChar() override = 0 ;
+	virtual char ToChar(bool show) override = 0 ;
 
 };

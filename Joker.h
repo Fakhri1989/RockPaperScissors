@@ -17,7 +17,9 @@ public:
 
 	void SetID(ID newType);
 
-	virtual char ToChar() override;
+	virtual char pieceInfo() override;
+
+	virtual char ToChar(bool show) override;
 
 	virtual string ToString() override;
 };

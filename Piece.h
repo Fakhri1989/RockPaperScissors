@@ -9,7 +9,7 @@ class Piece
 {
 	
 public:
-	bool revealed;
+	bool revealed=false;
 	enum DefendResult { Alive, Dead };
 	enum Player { Player1, Player2 };
 protected:
@@ -26,9 +26,10 @@ public:
 
 	Piece(Point _position, Player _player,Board* _game) : position(_position), player(_player),gameBoard(_game) {};
 	virtual DefendResult Defend(Piece * enemy) = 0;
-	virtual char ToChar() = 0;
+	virtual char ToChar(bool show) = 0;
 	virtual string ToString() = 0;
 	virtual void Die();
+	virtual char pieceInfo() = 0;
 	Board* getBoardFromPiece();
 };
 

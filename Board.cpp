@@ -56,13 +56,17 @@ string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 		}
 		else
 		{
-			if (board[pos.i][pos.j]->Defend(piece) == Piece::DefendResult::Dead)
-
+			if (board[pos.i][pos.j]->Defend(piece) == Piece::DefendResult::Dead)//we can do operator overload here
 			{
 				RemovePiece(board[pos.i][pos.j]);
 				if (piece->Defend(board[pos.i][pos.j]) == Piece::DefendResult::Alive)
+				{
 					board[pos.i][pos.j] = piece;
+					board[pos.i][pos.j]->revealed = true;
+				}
 			}
+			else
+				board[pos.i][pos.j]->revealed = true;
 		}
 	}
 	else
@@ -81,7 +85,7 @@ void Board::RemovePiece(Piece * piece)
 	}
 }
 
-void Board::PrintWhileWePlay(Point first, Point second,int delay)
+void Board::PrintWhileWePlay(Point first, Point second,int delay,bool knownInfo)
 {
 	Sleep(delay);
 
@@ -89,34 +93,22 @@ void Board::PrintWhileWePlay(Point first, Point second,int delay)
 	if (board[first.i][first.j] != NULL)
 	{
 		if (board[first.i][first.j]->GetPlayer() == 0) {
-			if (board[first.i][first.j]->IsAlive())
-				cout << red << board[first.i][first.j]->ToChar();
-			else
-				cout << " ";
+			PrintHelper(first, knownInfo, red);
 		}
 		else
 		{
-			if (board[first.i][first.j]->IsAlive())
-				cout << yellow << board[first.i][first.j]->ToChar();
-			else
-				cout << " ";
+			PrintHelper(first,knownInfo,yellow);
 		}
 	}
 	else cout << " ";
 	gotoxy(2 + 4 * (second.j), (second.i) * 2 + 1);
 	if (board[second.i][second.j] != NULL) {
 		if (board[second.i][second.j]->GetPlayer() == 0) {
-			if (board[second.i][second.j]->IsAlive())
-				cout << red << board[second.i][second.j]->ToChar();
-			else
-				cout << " ";
+			PrintHelper(second, knownInfo, red);
 		}
 		else
 		{
-			if (board[first.i][first.j]->IsAlive())
-				cout << yellow << board[first.i][first.j]->ToChar();
-			else
-				cout << " ";
+			PrintHelper(second, knownInfo, yellow);
 		}
 	}
 	else cout << " ";
@@ -124,11 +116,20 @@ void Board::PrintWhileWePlay(Point first, Point second,int delay)
 	cout << white;
 }
 
+void Board::PrintHelper(Point loc, bool info, color paint)
+{
+	gotoxy(2 + 4 * (loc.j), (loc.i) * 2 + 1);
+	if (board[loc.i][loc.j]->IsAlive())
+			cout << paint << board[loc.i][loc.j]->ToChar(info);
+	else
+		cout << " ";
+		
+}
+
 void Board::MovePiece(Piece * piece, Point newPos)
 {
 	Point oldPos = piece->GetPosition();
 	board[oldPos.i][oldPos.j] = nullptr;
-	piece->revealed = true;
 	board[newPos.i][newPos.j] = piece;
 }
 
@@ -156,7 +157,7 @@ string Board::ToString()
 			if (board[i][j] == nullptr)
 				ss << ' ';
 			else
-				ss << board[i][j]->ToChar();
+				ss << board[i][j]->pieceInfo();
 			ss << ' ';
 		}
 		ss << "|\n";
@@ -170,7 +171,7 @@ string Board::ToString()
 
 }
 
-void Board::printBoard(bool show1,bool show2,int delay)
+void Board::printBoard(bool show1,bool show2,int delay,bool knownInfo)
 {
 	/*Sleep(delay);*/
 
@@ -189,19 +190,25 @@ void Board::printBoard(bool show1,bool show2,int delay)
 			{
 				if (board[i][j]->GetPlayer() == Piece::Player::Player1)
 				{
-						if (board[i][j]->revealed == false&&show1)
-							cout << red << "U";
-						else
-							if (board[i][j]->ToChar() == 'J')
+					
+					if (board[i][j]->revealed == false && show2)
+						cout << red << board[i][j]->ToChar(knownInfo);
+					else
+						cout << red << board[i][j]->pieceInfo();
+						/*	if (board[i][j]->pieceInfo() == 'J')
 							{
 								cout << red << "J" << board[i][j]->ToChar();
 							}
 							else
 								cout << red << board[i][j]->ToChar();
-					}
+*/					}
 				else
 				{
-						if (board[i][j]->revealed == false&&show2)
+					if (board[i][j]->revealed == false && show1)
+						cout << red << board[i][j]->ToChar(knownInfo);
+					else
+						cout << red << board[i][j]->pieceInfo();
+					/*	if (board[i][j]->revealed == false&&show2)
 							cout << yellow << "U";
 						else
 							if (board[i][j]->ToChar() == 'J')
@@ -209,7 +216,7 @@ void Board::printBoard(bool show1,bool show2,int delay)
 								cout << yellow << "J" << board[i][j]->ToChar();
 							}
 							else
-								cout << yellow << board[i][j]->ToChar();
+								cout << yellow << board[i][j]->ToChar();*/
 				}
 			}
 			cout << blue << ' ';
@@ -269,6 +276,56 @@ Board::GAME_STATUS Board::checkStatus(string & reason)
 	reason = "Both players don't have any movable pieces";
 	return TIE;
 }
+
+void Board::PrintChanges(bool show1, bool show2,bool knownInfo)
+{
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			gotoxy(2 + 4 * j, i * 2 + 1);
+			if (board[i][j] == nullptr)
+				cout << ' ';
+			else if (board[i][j]->GetPlayer()==0)
+			{
+				if (board[i][j]->revealed == false && show2)
+					cout << red << board[i][j]->ToChar(true);
+				else
+					cout << red << board[i][j]->pieceInfo();
+				/*if (board[i][j]->GetPlayer() == Piece::Player::Player1)
+				{
+					if (board[i][j]->revealed == false && show1)
+						cout << red << "U";
+					else
+						if (board[i][j]->ToChar() == 'J')
+						{
+							cout << red << "J" << board[i][j]->ToChar();
+						}
+						else
+							cout << red << board[i][j]->ToChar();*/
+			}
+			else
+			{
+				if (show1) {
+					cout << yellow << board[i][j]->ToChar(true);
+				}
+				else
+					cout << yellow << board[i][j]->pieceInfo();
+			}
+					/*if (board[i][j]->revealed == false && show)
+						cout << yellow << "U";
+					else
+						if (board[i][j]->ToChar() == 'J')
+						{
+							cout << yellow << "J" << board[i][j]->ToChar();
+						}
+						else
+							cout << yellow << board[i][j]->ToChar();*/
+				
+			}
+		}
+	}
+
 
 list<Joker*> Board::getJokers(Piece::Player player)
 {

@@ -30,7 +30,7 @@ protected:
 	Playa PlayerOne, PlayerTwo;
 public:
 	Board():PlayerOne(1),PlayerTwo(2) {};
-
+	int getHeight() { return height; };
 	void setCounters(Counter PlayerOneCounter, Counter playerTwoCounter);
 
 	void setBoard(int _height, int _width);
@@ -47,7 +47,9 @@ public:
 
 	void RemovePiece(Piece * piece);
 
-	void PrintWhileWePlay(Point first, Point second,int delay);
+	void PrintWhileWePlay(Point first, Point second,int delay,bool);
+
+	void PrintHelper(Point loc, bool info,color paint);
 
 	void MovePiece(Piece * piece, Point newPos);
 
@@ -55,7 +57,7 @@ public:
 
 	string ToString();
 
-	void printBoard(bool show1,bool show2,int delay);
+	void printBoard(bool show1,bool show2,int delay,bool knownInfo);
 
 	Counter & GetPlayerOneCounter() { return one; }
 	Counter & GetPlayerTwoCounter() { return two; }
@@ -65,6 +67,8 @@ public:
 	GAME_STATUS checkStatus(string & reason);
 
 	friend void Piece::Die();
+
+	void PrintChanges(bool show1, bool show2,bool knownInfo);
 	
 	list <Joker *> getJokers(Piece::Player player);
 };

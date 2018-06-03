@@ -33,11 +33,13 @@ Piece::DefendResult Soldier::Defend(Piece * enemy)
 			{
 				soldier->Die();
 				return Piece::DefendResult::Alive;
+				revealed = true;
 			}
 			else
 			{
 				this->Die();
 				return Piece::DefendResult::Dead;
+				enemy->revealed = true;
 			}
 		}
 	}
@@ -48,26 +50,36 @@ Piece::DefendResult Soldier::Defend(Piece * enemy)
 	return this->IsAlive() ? Piece::DefendResult::Alive : Piece::DefendResult::Dead;
 }
 
-char Soldier::ToChar()
+char Soldier::ToChar(bool show)
+
 {
+	if (!show)
+		return pieceInfo();
+	else if (this->revealed)
+		return pieceInfo();
+	else
+		return 'U';
+	}
+
+char Soldier::pieceInfo()
+{
+	switch (this->type)
 	{
-		switch (this->type)
-		{
-		case R:
-			return 'R';
-			break;
-		case P:
-			return 'P';
-			break;
-		case S:
-			return 'S';
-			break;
-		default:
-			throw "Bad soldier type";
-			break;
-		}
+	case R:
+		return 'R';
+		break;
+	case P:
+		return 'P';
+		break;
+	case S:
+		return 'S';
+		break;
+	default:
+		throw "Bad soldier type";
+		break;
 	}
 }
+
 
 string Soldier::ToString()
 {

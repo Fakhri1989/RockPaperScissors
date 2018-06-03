@@ -10,6 +10,7 @@ void PVP::run(){
 	int x0, y0,x1,y1,jx,jy;
 	char c;
 	Joker * joker;
+	int turn = 1;
 	bool playerOneDonePlacement = false;
 	bool playerTwoDonePlacement = false;
 	bool isPlayerOneCurrentlyPlaying = true;
@@ -40,6 +41,20 @@ void PVP::run(){
 	{
 		do
 		{
+			if (turn != 1)
+			{
+				gameBoard.PrintChanges(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying,true);
+				cout << white;
+				gotoxy(0, gameBoard.getHeight() * 2 + 1);
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				cout << "                                                                                                                " << endl;
+				gotoxy(0, gameBoard.getHeight() * 2 + 1);
+			}
 			badInput = false;
 			cout << "\nPlayer " << (isPlayerOneCurrentlyPlaying ? "one" : "two") << ": What piece type would you like to place now? {R = rock, P = paper, S = scissors, J = joker, B = bomb, F = flag, X = end placement}: ";
 			cin >> PieceType;
@@ -80,7 +95,14 @@ void PVP::run(){
 			isPlayerOneCurrentlyPlaying = false;
 		else if(!isPlayerOneCurrentlyPlaying && !playerOneDonePlacement)
 			isPlayerOneCurrentlyPlaying = true;
-		gameBoard.printBoard(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying, 0);
+		if (turn == 1)
+		{
+			system("CLS");
+			gameBoard.printBoard(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying, 0,true);
+			turn++;
+		}
+			//gameBoard.PrintChanges(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying,true);
+
 	}
 
 	cout << "********************************************************\nfinished placement of both players\n********************************************************\n   start playing the game\n******************************************************** ";
