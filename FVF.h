@@ -22,5 +22,4 @@ public:
 	LineError parsePlacementFile(string path, Piece::Player player);
 	LineError parseMoveFile(string player1File, string player2File, int & winner, string & reason);
 	string parseMove(string input, Piece::Player player);
-
 };

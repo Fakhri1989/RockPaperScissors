@@ -1,13 +1,13 @@
 #pragma once
 #include "Point.h"
-#include "consoleColors.h"
+#include "consoleColors.h" 
 #include <sstream>
 
 class Board;
 
 class Piece
 {
-
+	
 public:
 	bool revealed=false;
 	enum DefendResult { Alive, Dead };
@@ -32,3 +32,4 @@ public:
 	virtual char pieceInfo() = 0;
 	Board* getBoardFromPiece();
 };
+
