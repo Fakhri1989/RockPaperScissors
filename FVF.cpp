@@ -143,7 +143,7 @@ bool FVF::updateParameters(string update)
 	string target, delayThingy;
 	//char c;
 	int i = 0;
-	bool isItOk;
+	bool isItOk = true;
 	for (i; i < update.length(); i++)
 	{
 		delayThingy = "";
