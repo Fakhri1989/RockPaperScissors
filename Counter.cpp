@@ -54,3 +54,7 @@ string Counter::checkCounter(Piece * piece)
 	}
 	return "ok";
 }
+
+
+
+

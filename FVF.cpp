@@ -2,6 +2,8 @@
 
 FVF::FVF(string _parameters) :parameters(_parameters)
 {
+	// change parameters through the 'gameOn'
+
 	setBoard(10, 10);
 }
 int FVF::run(string gameOn)
@@ -503,3 +505,4 @@ string FVF::parseMove(string input, Piece::Player player)
 	else 	return "input does not meet criteria. only <FROM_X> <FROM_Y> <TO_X> <TO_Y> [J: <Joker_X> <Joker_Y> <NEW_REP>] is allowed.";
 	return "ok";
 }
+

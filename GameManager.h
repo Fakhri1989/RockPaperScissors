@@ -10,7 +10,7 @@
 using namespace std;
 
 class GameManager {
-
+	
 protected:
 	Board gameBoard;
 	bool show1 = false;

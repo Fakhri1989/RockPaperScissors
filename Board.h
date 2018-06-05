@@ -23,25 +23,18 @@ class Board {
 private:
 	Counter one, two;
 	Piece *** board;
+	Playa PlayerOne,PlayerTwo;
 	int height;
 	int width;
 	list <Piece *>pieces;
-protected:
-	Playa PlayerOne, PlayerTwo;
 public:
 	Board():PlayerOne(1),PlayerTwo(2) {};
 	int getHeight() { return height; };
 	void setCounters(Counter PlayerOneCounter, Counter playerTwoCounter);
 
 	void setBoard(int _height, int _width);
-	
-	list<Piece *> getList() { return pieces;};
 
 	Piece * getPiece(Point pos);
-
-	Playa getPlayerOne() { return PlayerOne; };
-
-	Playa getPlayerTwo() { return PlayerTwo; };
 
 	string PlacePiece(Piece * piece, bool seeMe, GameManager *game);
 
@@ -63,7 +56,7 @@ public:
 	Counter & GetPlayerTwoCounter() { return two; }
 
 	enum GAME_STATUS {KEEP_PLAYING,  TIE , PLAYER_1_WIN, PLAYER_2_WIN };
-	
+
 	GAME_STATUS checkStatus(string & reason);
 
 	friend void Piece::Die();
