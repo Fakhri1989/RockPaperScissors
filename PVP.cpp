@@ -105,7 +105,7 @@ void PVP::run(){
 
 	}
 
-	cout << "********************************************************\nfinished placement of both players\n********************************************************\n   start playing the game\n******************************************************** ";
+	cout << "\n********************************************************\nfinished placement of both players\n********************************************************\n   start playing the game\n********************************************************\n ";
 	badInput = false;
 
 	Board::GAME_STATUS status;
@@ -167,17 +167,18 @@ void PVP::run(){
 
 		isPlayerOneCurrentlyPlaying = !isPlayerOneCurrentlyPlaying;
 	}
-
+	system("CLS");
+	gameBoard.printBoard(true, true, false, false);
 	switch (status)
 	{
 	case Board::TIE:
-		cout << "The game ended in a tie. \n reason: " << reason << endl;
+		cout << "\nThe game ended in a tie. \n reason: " << reason << endl;
 		break;
 	case Board::PLAYER_1_WIN:
-		cout << "The game ended, player one - YOU WIN!!!!. \n reason: " << reason << endl;
+		cout << "\nThe game ended, player one - YOU WIN!!!!. \n reason: " << reason << endl;
 		break;
 	case Board::PLAYER_2_WIN:
-		cout << "The game ended, player two - YOU WIN!!!!. \n reason: " << reason << endl;
+		cout << "\nThe game ended, player two - YOU WIN!!!!. \n reason: " << reason << endl;
 		break;
 	default:
 		break;

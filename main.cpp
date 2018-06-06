@@ -9,6 +9,7 @@ int main(int argc,char** argv)
 {
 	Game game(argv, argc);
 	
+	system("pause");
 	return 0; 
 }
 
@@ -35,5 +36,16 @@ int main(int argc,char** argv)
 ----------------------------------------
 ERROR in file player1.rps_moves of player 1 in line 1:
      moving this distance or this direction just cant be done buddy!!
-Press any key to continue . . .*/
+Press any key to continue . . .
 
+------------
+|   |   |   |
+------------
+|   |   |   |
+------------
+|   |   |   |
+------------
+
+The game ended, player one - YOU WIN!!!!.reason: All moving PIECEs of the opponent are eaten
+
+*/
