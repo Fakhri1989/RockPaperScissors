@@ -19,7 +19,6 @@ Piece::Player Piece::GetPlayer()
 void Piece::Die()
 {
 	alive = false;
-	//gameBoard->RemovePiece(this);
 }
 
 Board * Piece::getBoardFromPiece()

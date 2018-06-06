@@ -101,7 +101,7 @@ void PVP::run(){
 			gameBoard.printBoard(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying, 0,true);
 			turn++;
 		}
-			//gameBoard.PrintChanges(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying,true);
+			gameBoard.PrintChanges(isPlayerOneCurrentlyPlaying, !isPlayerOneCurrentlyPlaying,true);
 
 	}
 

@@ -4,7 +4,6 @@
 #include <fstream>
 #include <Windows.h>
 #include "Board.h"
-//#include "Flag.h"
 #include "Gotoxy.h"
 #include "LineError.h"
 using namespace std;

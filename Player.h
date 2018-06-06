@@ -14,6 +14,5 @@ class Playa {
 public:
 	Playa(int who); 
 	void operator<< (string in) { name = in; };
-	/*void setPlayerName(string _name) { name = _name; };*/
 	string getPlayerNAme() { return name; };
 };

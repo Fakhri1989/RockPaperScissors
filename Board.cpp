@@ -196,28 +196,13 @@ void Board::printBoard(bool show1,bool show2,int delay,bool knownInfo)
 						cout << red << board[i][j]->ToChar(knownInfo);
 					else
 						cout << red << board[i][j]->pieceInfo();
-						/*	if (board[i][j]->pieceInfo() == 'J')
-							{
-								cout << red << "J" << board[i][j]->ToChar();
-							}
-							else
-								cout << red << board[i][j]->ToChar();
-*/					}
+				}
 				else
 				{
 					if (board[i][j]->revealed == false && show1)
 						cout << yellow << board[i][j]->ToChar(knownInfo);
 					else
 						cout << yellow << board[i][j]->pieceInfo();
-					/*	if (board[i][j]->revealed == false&&show2)
-							cout << yellow << "U";
-						else
-							if (board[i][j]->ToChar() == 'J')
-							{
-								cout << yellow << "J" << board[i][j]->ToChar();
-							}
-							else
-								cout << yellow << board[i][j]->ToChar();*/
 				}
 			}
 			cout << blue << ' ';
@@ -287,45 +272,25 @@ void Board::PrintChanges(bool show1, bool show2,bool knownInfo)
 			gotoxy(2 + 4 * j, i * 2 + 1);
 			if (board[i][j] == nullptr)
 				cout << ' ';
-			else if (board[i][j]->GetPlayer()==0)
+			else if (board[i][j]->GetPlayer() == 0)
 			{
 				if (board[i][j]->revealed == false && show2)
 					cout << red << board[i][j]->ToChar(true);
 				else
 					cout << red << board[i][j]->pieceInfo();
-				/*if (board[i][j]->GetPlayer() == Piece::Player::Player1)
-				{
-					if (board[i][j]->revealed == false && show1)
-						cout << red << "U";
-					else
-						if (board[i][j]->ToChar() == 'J')
-						{
-							cout << red << "J" << board[i][j]->ToChar();
-						}
-						else
-							cout << red << board[i][j]->ToChar();*/
 			}
 			else
 			{
-				if (show1) {
+				if (show1)
 					cout << yellow << board[i][j]->ToChar(true);
-				}
+				
 				else
 					cout << yellow << board[i][j]->pieceInfo();
-			}
-					/*if (board[i][j]->revealed == false && show)
-						cout << yellow << "U";
-					else
-						if (board[i][j]->ToChar() == 'J')
-						{
-							cout << yellow << "J" << board[i][j]->ToChar();
-						}
-						else
-							cout << yellow << board[i][j]->ToChar();*/
-				
+
 			}
 		}
 	}
+}
 
 
 list<Joker*> Board::getJokers(Piece::Player player)
