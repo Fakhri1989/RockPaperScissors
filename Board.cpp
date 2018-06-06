@@ -31,7 +31,8 @@ Piece * Board::getPiece(Point pos)
 
 string Board::PlacePiece(Piece * piece, bool seeMe,GameManager* game)
 {
-	pieces.push_back(piece);
+	(*this)(piece);
+	
 	piece->revealed = seeMe;
 	Point pos = piece->GetPosition();
 	string res = "ok";
@@ -104,11 +105,11 @@ void Board::PrintWhileWePlay(Point first, Point second,int delay,bool knownInfo)
 	gotoxy(2 + 4 * (second.j), (second.i) * 2 + 1);
 	if (board[second.i][second.j] != NULL) {
 		if (board[second.i][second.j]->GetPlayer() == 0) {
-			PrintHelper(second, knownInfo, red);
+			PrintHelper(second, knownInfo, yellow);
 		}
 		else
 		{
-			PrintHelper(second, knownInfo, yellow);
+			PrintHelper(second, knownInfo, red);
 		}
 	}
 	else cout << " ";
@@ -205,9 +206,9 @@ void Board::printBoard(bool show1,bool show2,int delay,bool knownInfo)
 				else
 				{
 					if (board[i][j]->revealed == false && show1)
-						cout << red << board[i][j]->ToChar(knownInfo);
+						cout << yellow << board[i][j]->ToChar(knownInfo);
 					else
-						cout << red << board[i][j]->pieceInfo();
+						cout << yellow << board[i][j]->pieceInfo();
 					/*	if (board[i][j]->revealed == false&&show2)
 							cout << yellow << "U";
 						else

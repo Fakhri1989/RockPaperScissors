@@ -13,6 +13,7 @@ class Playa {
 	string name;
 public:
 	Playa(int who); 
-	void setPlayerName(string _name) { name = _name; };
+	void operator<< (string in) { name = in; };
+	/*void setPlayerName(string _name) { name = _name; };*/
 	string getPlayerNAme() { return name; };
 };

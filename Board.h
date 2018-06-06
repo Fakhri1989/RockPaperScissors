@@ -36,6 +36,8 @@ public:
 	void setBoard(int _height, int _width);
 	
 	list<Piece *> getList() { return pieces;};
+	
+	void operator ()(Piece *p) { pieces.push_back(p); };
 
 	Piece * getPiece(Point pos);
 
@@ -60,11 +62,14 @@ public:
 	void printBoard(bool show1,bool show2,int delay,bool knownInfo);
 
 	Counter & GetPlayerOneCounter() { return one; }
+
 	Counter & GetPlayerTwoCounter() { return two; }
 
 	enum GAME_STATUS {KEEP_PLAYING,  TIE , PLAYER_1_WIN, PLAYER_2_WIN };
 	
 	GAME_STATUS checkStatus(string & reason);
+
+	Piece* operator[] (Point pos) { return board[pos.i][pos.j]; };
 
 	friend void Piece::Die();
 

@@ -205,14 +205,14 @@ string PVP::parseMove(int x0, int y0, int x1, int y1, Piece::Player player)
 	{
 		Point pos1(x0, y0);
 
-		if ((piece = getBoard()->getPiece(pos1)) != nullptr)
+		if ((piece = (*getBoard())[pos1]) != nullptr)
 		{
 			if (piece->GetPlayer() == player)
 			{
 				if ((movable = dynamic_cast<Movable *>(piece)) != nullptr)
 				{
 					Point enemyPos(x1, y1);
-					enemy = getBoard()->getPiece(enemyPos);
+					enemy = (*getBoard())[enemyPos];
 
 					if (enemy == nullptr)
 					{
@@ -246,7 +246,7 @@ string PVP::parseJoker(int jx, int jy, char c, Piece::Player player)
 {
 	Joker * joker;
 	Point pos(jx, jy);
-	Piece * piece = getBoard()->getPiece(pos);
+	Piece * piece = (*getBoard())[pos];
 	if (piece != nullptr)
 	{
 		if (piece->GetPlayer() == player)

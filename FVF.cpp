@@ -79,7 +79,12 @@ int FVF::run(string gameOn)
 			reason = "Bad Moves input file for player " + (out.player == Piece::Player::Player1 ? to_string(1) : to_string(2)) + " - line " + to_string(out.lineNumber);
 			cout << out.ToString() << endl;
 		}
-
+		if (winner == 0)
+			; {
+			cout << "Winner: " + to_string(winner) + "\n";
+			cout << "Reason: " + reason + "\n\n";
+		}
+		//cout << getBoard()->ToString() + "\n";
 		ofstream out;
 		out.open("rps.output");
 		out << "Winner: " + to_string(winner) + "\n";
@@ -162,21 +167,22 @@ bool FVF::updateParameters(string update)
 				i--;
 				isItOk = changeDelay(stoi(delayThingy));
 			}
-			else
+			else if (target == "-show")
+			
 			{
-				if (target == "-show")
+				i++;
+				target.append(1, update[i]);
+				i++;
+				while (i <= update.length() && update[i] != ' ')
 				{
-					i++;
 					target.append(1, update[i]);
 					i++;
-					while (i <= update.length() && update[i] != ' ')
-					{
-						target.append(1, update[i]);
-						i++;
-					}
-					isItOk = changeTheOthers(target);
 				}
-
+				isItOk = changeTheOthers(target);
+			}
+			else if (target == "-quiet")
+			{
+				isItOk = changeTheOthers(target);
 			}
 			i++;
 		}
@@ -235,8 +241,7 @@ bool FVF::changeTheOthers(string parameter)
 		{
 			if (onlyKnownInfo == false)
 			{
-				onlyKnownInfo = true;
-				return true;
+				return onlyKnownInfo = true;	
 			}
 		}
 		else if (parameter == "-quiet")
@@ -391,7 +396,7 @@ LineError FVF::parseMoveFile(string player1File, string player2File, int & winne
 	if (!endGame)
 	{
 		winner = 0;
-		reason = "A tie - both Moves input files done without a winner";
+		reason.assign("A tie - both Moves input files done without a winner");
 	}
 	return ok;
 }
@@ -416,14 +421,14 @@ string FVF::parseMove(string input, Piece::Player player)
 	{
 		Point pos1(x0, y0);
 
-		if ((piece = getBoard()->getPiece(pos1)) != nullptr)
+		if ((piece = (*getBoard())[pos1]) != nullptr)
 		{
 			if (piece->GetPlayer() == player)
 			{
 				if ((movable = dynamic_cast<Movable *>(piece)) != nullptr)
 				{
 					Point enemyPos(x1, y1);
-					enemy = getBoard()->getPiece(enemyPos);
+					enemy = (*getBoard())[enemyPos];
 
 					if (enemy == nullptr)
 					{
@@ -458,7 +463,7 @@ string FVF::parseMove(string input, Piece::Player player)
 		{
 			Joker * joker;
 			Point pos(jx, jy);
-			Piece * piece = getBoard()->getPiece(pos);
+			Piece * piece = (*getBoard())[pos];
 			if (piece != nullptr)
 			{
 				if (piece->GetPlayer() == player)
@@ -503,3 +508,4 @@ string FVF::parseMove(string input, Piece::Player player)
 	else 	return "input does not meet criteria. only <FROM_X> <FROM_Y> <TO_X> <TO_Y> [J: <Joker_X> <Joker_Y> <NEW_REP>] is allowed.";
 	return "ok";
 }
+

@@ -18,6 +18,10 @@ public:
 	bool updateParameters(string update);
 	bool changeTheOthers(string parameter);
 	bool changeDelay(int time);
+
+	void operator++() { onlyKnownInfo = true; };
+	void operator--() { quiet = true; };
+
 	bool catchFirstNum(string str, int& x, int& index);
 	LineError parsePlacementFile(string path, Piece::Player player);
 	LineError parseMoveFile(string player1File, string player2File, int & winner, string & reason);
